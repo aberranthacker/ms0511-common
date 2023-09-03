@@ -57,14 +57,18 @@
 .equiv CCH0OI, 064     # CPU channel 0 out  state interrupt
 .equiv CCH0OS, 0177564 # CPU channel 0 out  state register
 .equiv CCH0OD, 0177566 # CPU channel 0 out  data register
-.equiv TTYIST, CCH0IS   # TTY in state
-.equiv TTYIDT, CCH0ID   # TTY in data
-.equiv TTYOST, CCH0OS   # TTY out state
-.equiv TTYODT, CCH0OD   # TTY out data
+.equiv TTYIST, CCH0IS  # TTY in state
+.equiv TTYIDT, CCH0ID  # TTY in data
+.equiv TTYOST, CCH0OS  # TTY out state
+.equiv TTYODT, CCH0OD  # TTY out data
 .equiv TTY.Input.State, TTYIST
-.equiv TTY.Input.Data, TTYIDT
+.equiv TTY.Input.Data,  TTYIDT
+.equiv TTY.In.State, TTYIST
+.equiv TTY.In.Data,  TTYIDT
 .equiv TTY.Output.State, TTYOST
-.equiv TTY.Output.Data, TTYODT
+.equiv TTY.Output.Data,  TTYODT
+.equiv TTY.Out.State, TTYOST
+.equiv TTY.Out.Data,  TTYODT
 
 
 # SRAM module register

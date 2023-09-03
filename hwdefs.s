@@ -91,18 +91,23 @@
 .equiv PASWCR, 0177054 # PPU address space window control register
 
 # PPU: to CPU communication channels
+# terminal emulation channel
 .equiv PCH0II, 0320    # PPU channel 0 in  data interrupt
 .equiv PCH0ID, 0177060 # PPU channel 0 in  data register
 .equiv PCH0OI, 0324    # PPU channel 0 out data interrupt
 .equiv PCH0OD, 0177070 # PPU channel 0 out data register
+# parallel port access channel
 .equiv PCH1II, 0330    # PPU channel 1 in  data interrupt
 .equiv PCH1ID, 0177062 # PPU channel 1 in  data register
 .equiv PCH1OI, 0334    # PPU channel 1 out data interrupt
 .equiv PCH1OD, 0177072 # PPU channel 1 out data register
+# command channel
 .equiv PCH2II, 0340    # PPU channel 2 in  data interrupt
 .equiv PCH2ID, 0177064 # PPU channel 2 in  data register
+
 .equiv PCHSIS, 0177066 # PPU channels 0, 1, 2 in - state register
 .equiv PCHSOS, 0177076 # PPU channels 0/1 out - state register
+
 .equiv Ch0StateInInt,  0b00000001 # channel 0 interrupt allowed
 .equiv Ch1StateInInt,  0b00000010 # channel 1 interrupt allowed
 .equiv Ch2StateInInt,  0b00000100 # channel 2 interrupt allowed

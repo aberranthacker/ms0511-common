@@ -1,45 +1,51 @@
 # vim: set fileformat=unix filetype=gas tabstop=8 expandtab shiftwidth=4 autoindent :
 
-.macro .wait_ppu
-    TSTB @$CCH0OS
-    BPL  .-4
-.endm
-
-.macro .ppudo cmd:req,arg=0
+.macro .ppudo_enqueue cmd:req, arg=0
   .if \arg != 0
     MOV  \arg, @$PPUCommandArg
   .endif
     MOV  \cmd, @$CCH0OD
 .endm
 
-.macro .ppudo_ensure cmd:req,arg=0
-   .wait_ppu
-   .ppudo \cmd, \arg
+.macro .ppudo_enqueue_ensure cmd:req, arg=0
+    TSTB @$CCH0OS
+    BPL  .-4
+   .ppudo_enqueue \cmd, \arg
+.endm
+
+.macro .ppudo cmd:req
+    MOV  \cmd, @$CCH2OD
+.endm
+
+.macro .ppudo_ensure cmd:req
+    TSTB @$CCH2OS
+    BPL  .-4
+    .ppudo \cmd
 .endm
 
 .macro .inform_and_hang str
-   .ppudo_ensure $PPU_DebugPrintAt, $inform_and_hang_string\@
+   .ppudo_enqueue_ensure $PPU_DebugPrintAt, $inform_and_hang_string\@
     BR   .
 inform_and_hang_string\@:
-   .byte 0,1
+   .byte 0, 1
    .asciz "\str"
    .even
 .endm
 
 .macro .inform_and_hang2 str
-   .ppudo_ensure $PPU_DebugPrintAt, $inform_and_hang2_string\@
+   .ppudo_enqueue_ensure $PPU_DebugPrintAt, $inform_and_hang2_string\@
     BR   .
 inform_and_hang2_string\@:
-   .byte 0,2
+   .byte 0, 2
    .asciz "\str"
    .even
 .endm
 
 .macro .inform_and_hang3 str
-   .ppudo_ensure $PPU_DebugPrintAt, $inform_and_hang3_string\@
+   .ppudo_enqueue_ensure $PPU_DebugPrintAt, $inform_and_hang3_string\@
     BR   .
 inform_and_hang3_string\@:
-   .byte 0,3
+   .byte 0, 3
    .asciz "\str"
    .even
 .endm

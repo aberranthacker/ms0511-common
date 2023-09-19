@@ -1,30 +1,63 @@
-.equiv PR7, 7 * 040 # highest priority to the processor
-                    # MTPS $PR7 disables interrupts
-.equiv PR0, 0       # lowest priority to the processor
-                    # MTPS $PR0 enables interrupts
+# highest priority to the processor (VM2 ignores bits 5 and 6)
+# MTPS $PR7 disables interrupts
+.equiv PR7, 0b11100000
+# lowest priority to the processor
+# MTPS $PR0 enables interrupts
+.equiv PR0, 0   
+# R   - read only
+# W   - write only
+# R/W - read/write
+# SD  - set on power on
+# RD  - reset on power on
+# RIN - reset on power on and on RESET instruction
+# SIN - set on power on and on RESET instruction
 
 # CPU USER mode interrupt vectors and priorities
-#     Vect Prty Source
+#     Vect  Prty  Source
 #  oct dec
-#   04   4    1 input/output RPLY timeout
-#   04   4    2 illegal addressing mode
-#  010   8    2 unknown instruction/HALT mode command in USER mode
-#  014  12    3 T-bit
-#  014  12    - BPT instruction
-#  020  16    - IOT instruction
-#  024  20    4 ACLO
-#  030  24    - EMT  instruction
-#  034  28    - TRAP instruction
-#  060  48      TTY out (channel 0 out)
-#  064  52      TTY in (channel 0 in)
-# 0100  64    6 EVNT (Vsync)
-# 0370 248      serial (C2)
-# 0374 252      serial (C2)
-# 0380 256      serial (LAN)
-# 0384 260      serial (LAN)
-# 0460 304      channel 1 out
-# 0464 308      channel 1 in
-# 0474 316      channel 2 in
+#   04   4     1  input/output RPLY timeout
+#   04   4     2  illegal addressing mode
+#  010   8     2  unknown instruction/HALT mode command in USER mode
+#  014  12     3  T-bit
+#  014  12     -  BPT instruction
+#  020  16     -  IOT instruction
+#  024  20     4  ACLO
+#  030  24     -  EMT  instruction
+#  034  28     -  TRAP instruction
+#  060  48   7.1  TTY out (channel 0 out), disabled by default
+#  064  52   7.2  TTY in (channel 0 in), disabled by default
+# 0100  64     6  EVNT (Vsync)
+# 0370 248   7.7  serial (C2), disabled by default
+# 0374 252   7.8  serial (C2), disabled by default
+# 0380 256   7.9  serial (LAN), disabled by default
+# 0384 260  7.10  serial (LAN), disabled by default
+# 0460 304   7.3  channel 1 out, disabled by default
+# 0464 308   7.4  channel 1 in, disabled by default
+# 0474 316   7.5  channel 2 in, disabled by default
+# 0bxxxxxx00 7.6  address trap, disabled by default
+
+# PPU USER mode interrupt vectors and priorities
+#     Vect Prty  Handler   PSW  Source
+#  oct dec
+#   04   4    1  0173632  0600  input/output RPLY timeout
+#   04   4    2                 illegal addressing mode
+#  010   8    2  0160210  0600  unknown instruction/HALT mode command in USER mode
+#  014  12    3  0000000  0000  T-bit
+#  014  12    -                 BPT instruction
+#  020  16    -  0000000  0000  IOT instruction
+#  024  20    4  0160220  0600  ACLO
+#  030  24    -  0174270  0000  EMT  instruction
+#  034  28    -  0174334  0200  TRAP instruction
+# 0100  64    6  0174612  0200  EVNT (Vsync)
+# 0300 192  7.3  0175412  0200  keyboard
+# 0304 196  7.2  0174612  0200  programmable timer reached 0 
+# 0310 200  7.1  0000000  0000  external event
+# 0314 204  7.4  0176130  0200  RESET on CPU bus
+# 0320 208  7.5  0175700  0200  channel 0 in  (TTY)
+# 0324 212  7.6  0175540  0200  channel 0 out (TTY)
+# 0330 216  7.7  0175754  0000  channel 1 in  (printer)
+# 0334 220  7.8  0000000  0000  channel 1 out (printer)
+# 0340 224  7.9  0175762  0200  channel 2 in  (command)
 
 # CPU: bitplanes registers
 .equiv CBPADR, 0176640 # CPU bitplanes address register
@@ -32,7 +65,7 @@
 .equiv CBP2DT, 0176643 # CPU bitplane 2 data register
 .equiv CBP12D, CBP1DT  # CPU bitplanes 1 and 2 data register
                        # alias for word access
-# serial port
+# serial port С2 (RS-232)
 .equiv S2IST, 0176570
 .equiv S2IDT, 0176572
 .equiv S2OST, 0176574
@@ -69,7 +102,6 @@
 .equiv TTY.Output.Data,  TTYODT
 .equiv TTY.Out.State, TTYOST
 .equiv TTY.Out.Data,  TTYODT
-
 
 # SRAM module register
 .equiv WNDRGS, 0176000 # windows registers
@@ -109,15 +141,17 @@
 .equiv PCH2II, 0340    # PPU channel 2 in  data interrupt
 .equiv PCH2ID, 0177064 # PPU channel 2 in  data register
 
+# 0177066 default value 0b01000111
 .equiv PCHSIS, 0177066 # PPU channels 0, 1, 2 in - state register
+# 0177076 default value 0b00111110
 .equiv PCHSOS, 0177076 # PPU channels 0/1 out - state register
 
 .equiv Ch0StateInInt,  0b00000001 # channel 0 interrupt allowed
 .equiv Ch1StateInInt,  0b00000010 # channel 1 interrupt allowed
 .equiv Ch2StateInInt,  0b00000100 # channel 2 interrupt allowed
-.equiv Ch0InReady,     0b00001000 # channel 0 ready
-.equiv Ch1InReady,     0b00010000 # channel 1 ready
-.equiv Ch2InReady,     0b00100000 # channel 2 ready
+.equiv Ch0InReady,     0b00001000 # channel 0 has data to read
+.equiv Ch1InReady,     0b00010000 # channel 1 has data to read
+.equiv Ch2InReady,     0b00100000 # channel 2 has data to read
 .equiv IntOnCPU_RESET, 0b01000000 # interrupt on RESET on CPU bus
 
 .equiv RSTINT, 0314    # RESET on CPU bus interrupt
@@ -129,7 +163,7 @@
 .equiv PARCTL, 0177103 # parallel port control byte
 
 # PPU: floppy disk controller
-.equiv FDCSTS, 0177130 # floppy disk controller state register
+.equiv FDCST,  0177130 # floppy disk controller state register
 .equiv FDCDT,  0177132 # floppy disk controller data register
 
 # PPU: keyboard
@@ -149,3 +183,8 @@
 .equiv PSG0, 0177360
 .equiv PSG1, 0177362
 .equiv PSG2, 0177364
+# unused address, but responds with RPLY
+# returns 010000 (4096)
+.equiv DUMMY_PSG, 0177704
+
+# 0177074 unused, responds with RPLY, returns 0

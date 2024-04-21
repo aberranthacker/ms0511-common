@@ -100,12 +100,16 @@ no_loading_error\@:
     RTS  PC
 .endm
 
-.macro push reg
-    MOV  \reg,-(SP)
+.macro push expressions:vararg
+    .irp expression, \expressions
+        MOV  \expression,-(SP)
+    .endr
 .endm
 
-.macro pop reg
-    MOV  (SP)+,\reg
+.macro pop  expressions:vararg
+    .irp expression, \expressions
+        MOV  (SP)+,\expression
+    .endr
 .endm
 
 .macro bze dst

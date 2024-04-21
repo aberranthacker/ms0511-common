@@ -5,10 +5,12 @@
 # Usage:
 # MOV $src_adr,R1
 # MOV $dst_adr,R2
-# CALL Unpack
+# CALL UnLZSA3
 
-#.global Unpack
+       .include "macros.s"
+       .global UnLZSA3
 
+UnLZSA3:
 Unpack: CLR  R5          # no nibbles sign
 Token:  MOVB (R1)+,R3    # read token
 

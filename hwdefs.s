@@ -124,6 +124,17 @@
 .equiv DTSOCT, 0177024 # PPU dots octet
 .equiv PBPMSK, 0177026 # PPU bitplanes mask register
 
+.equiv PPU.Bitplanes_AddressReg, PBPADR
+.equiv PPU.BP0_DataReg, PBP0DT
+.equiv PPU.BP1_DataReg, PBP1DT
+.equiv PPU.BP2_DataReg, PBP2DT
+.equiv PPU.BP12_DataReg, PBP12D
+.equiv PPU.DotsColorReg, DTSCOL
+.equiv PPU.BP01_BackgroundColorReg, BP01BC
+.equiv PPU.BP12_BackgroundColorReg, BP12BC
+.equiv PPU.DotsOctetReg, DTSOCT
+.equiv PPU.BitplanesMaskReg, PBPMSK
+
 .equiv PASWCR, 0177054 # PPU address space window control register
 
 # PPU: to CPU communication channels

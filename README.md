@@ -1,1 +1,1 @@
-# ms0511_common
+# Elektronika MS 0511 common include files

@@ -71,23 +71,23 @@
 
 ; CPU: to PPU communication channels
 ; parallel port access channel
-.equiv CCH1II, 0460    ; CPU channel 1 in   state interrupt
-.equiv CCH1IS, 0176660 ; CPU channel 1 in   state register
-.equiv CCH1ID, 0176662 ; CPU channel 1 in   data register
-.equiv CCH1OI, 0464    ; CPU channel 1 out  state interrput
-.equiv CCH1OS, 0176664 ; CPU channel 1 out  state register
-.equiv CCH1OD, 0176666 ; CPU channel 1 out  data register
+.equiv CCH1II, 0460    ; CPU channel 1 in  state interrupt
+.equiv CCH1IS, 0176660 ; CPU channel 1 in  state register
+.equiv CCH1ID, 0176662 ; CPU channel 1 in  data register
+.equiv CCH1OI, 0464    ; CPU channel 1 out state interrput
+.equiv CCH1OS, 0176664 ; CPU channel 1 out state register
+.equiv CCH1OD, 0176666 ; CPU channel 1 out data register
 ; command channel
-.equiv CCH2OI, 0474    ; CPU channel 2 out  state interrupt
-.equiv CCH2OS, 0176674 ; CPU channel 2 out  state register
-.equiv CCH2OD, 0176676 ; CPU channel 2 out  data register
+.equiv CCH2OI, 0474    ; CPU channel 2 out state interrupt
+.equiv CCH2OS, 0176674 ; CPU channel 2 out state register
+.equiv CCH2OD, 0176676 ; CPU channel 2 out data register
 ; terminal emulation channel
-.equiv CCH0II, 060     ; CPU channel 0 in   state interrupt
-.equiv CCH0IS, 0177560 ; CPU channel 0 in   state register
-.equiv CCH0ID, 0177562 ; CPU channel 0 in   data register
-.equiv CCH0OI, 064     ; CPU channel 0 out  state interrupt
-.equiv CCH0OS, 0177564 ; CPU channel 0 out  state register
-.equiv CCH0OD, 0177566 ; CPU channel 0 out  data register
+.equiv CCH0II, 060     ; CPU channel 0 in  state interrupt
+.equiv CCH0IS, 0177560 ; CPU channel 0 in  state register
+.equiv CCH0ID, 0177562 ; CPU channel 0 in  data register
+.equiv CCH0OI, 064     ; CPU channel 0 out state interrupt
+.equiv CCH0OS, 0177564 ; CPU channel 0 out state register
+.equiv CCH0OD, 0177566 ; CPU channel 0 out data register
 .equiv TTYIST, CCH0IS  ; TTY in state
 .equiv TTYIDT, CCH0ID  ; TTY in data
 .equiv TTYOST, CCH0OS  ; TTY out state
@@ -192,8 +192,5 @@
 .equiv PSG0, 0177360
 .equiv PSG1, 0177362
 .equiv PSG2, 0177364
-; unused address, but responds with RPLY
-; returns 010000 (4096)
-.equiv DUMMY_PSG, 0177704
-
-; 0177074 unused, responds with RPLY, returns 0
+; register stub, responds with RPLY, returns 010000 (4096)
+.equiv PSG_STUB, 0177704

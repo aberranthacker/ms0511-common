@@ -2,9 +2,13 @@
 
 This repository contains common include files that I frequently use in projects
 for the [Elektronika MS 0511](https://en.wikipedia.org/wiki/UKNC).
+## To add to a project as sub-module execute:
+
+```sh
+git submodule add git@github.com:aberranthacker/ms0511-common.git common
+```
 
 ## Third-Party Source Files
-
 In addition to my own include files, this repository also includes the following
 third-party source files:
 | file              | description                                                                  |

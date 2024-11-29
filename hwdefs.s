@@ -1,3 +1,5 @@
+.include "romdefs.s"
+
 ; highest priority to the processor (VM2 ignores bits 5 and 6)
 .equiv PR7, 0b11100000 ; MTPS #PR7 disables interrupts
 ; lowest priority to the processor
@@ -10,6 +12,7 @@
 ; RIN - reset on power on and on RESET instruction
 ; SIN - set on power on and on RESET instruction
 
+; CPU {{{
 ; CPU USER mode interrupt vectors and priorities
 ;     Vect  Prty  Source
 ;  oct dec
@@ -33,29 +36,6 @@
 ; 0464 308   7.4  channel 1 out, disabled by default
 ; 0474 316   7.5  channel 2 out, disabled by default
 ; 0bxxxxxx00 7.6  address trap, disabled by default
-
-; PPU USER mode interrupt vectors and priorities
-;     Vect Prty  Handler   PSW  Source
-;  oct dec
-;   04   4    1  0173632  0600  input/output RPLY timeout
-;   04   4    2                 illegal addressing mode
-;  010   8    2  0160210  0600  unknown instruction/HALT mode command in USER mode
-;  014  12    3  0000000  0000  T-bit
-;  014  12    -                 BPT instruction
-;  020  16    -  0000000  0000  IOT instruction
-;  024  20    4  0160220  0600  ACLO
-;  030  24    -  0174270  0000  EMT  instruction
-;  034  28    -  0174334  0200  TRAP instruction
-; 0100  64    6  0174612  0200  EVNT (Vsync)
-; 0300 192  7.3  0175412  0200  keyboard
-; 0304 196  7.2  0174612  0200  programmable timer reached 0
-; 0310 200  7.1  0000000  0000  external event
-; 0314 204  7.4  0176130  0200  RESET on CPU bus
-; 0320 208  7.5  0175700  0200  channel 0 in  (TTY)
-; 0324 212  7.6  0175540  0200  channel 0 out (TTY)
-; 0330 216  7.7  0175754  0000  channel 1 in  (printer)
-; 0334 220  7.8  0000000  0000  channel 1 out (printer)
-; 0340 224  7.9  0175762  0200  channel 2 in  (command)
 
 ; CPU: bitplanes registers
 .equiv CBPADR, 0176640 ; CPU bitplanes address register
@@ -105,10 +85,31 @@
 .equiv WNDRGS, 0176000 ; windows registers
 .equiv WNDRGA, 0176000 ; window a register
 .equiv WNDRGB, 0176001 ; window b register
+; }}}
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;                               PPU registers                                  ;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; PPU {{{
+; PPU USER mode interrupt vectors and priorities
+;     Vect Prty  Handler   PSW  Source
+;  oct dec
+;   04   4    1  0173632  0600  input/output RPLY timeout
+;   04   4    2                 illegal addressing mode
+;  010   8    2  0160210  0600  unknown instruction/HALT mode command in USER mode
+;  014  12    3  0000000  0000  T-bit
+;  014  12    -                 BPT instruction
+;  020  16    -  0000000  0000  IOT instruction
+;  024  20    4  0160220  0600  ACLO
+;  030  24    -  0174270  0000  EMT  instruction
+;  034  28    -  0174334  0200  TRAP instruction
+; 0100  64    6  0174612  0200  EVNT (Vsync)
+; 0300 192  7.3  0175412  0200  keyboard
+; 0304 196  7.2  0174612  0200  programmable timer reached 0
+; 0310 200  7.1  0000000  0000  external event
+; 0314 204  7.4  0176130  0200  RESET on CPU bus
+; 0320 208  7.5  0175700  0200  channel 0 in  (TTY)
+; 0324 212  7.6  0175540  0200  channel 0 out (TTY)
+; 0330 216  7.7  0175754  0000  channel 1 in  (printer)
+; 0334 220  7.8  0000000  0000  channel 1 out (printer)
+; 0340 224  7.9  0175762  0200  channel 2 in  (command)
 
 ; PPU: bitplanes registers
 .equiv PBPADR, 0177010 ; PPU bitplanes address register
@@ -181,10 +182,11 @@
 .equiv KBDATA, 0177702 ; keyboard data register
 
 ; PPU: Programmable timer
-.equiv TMRST , 0177710 ; State register
+.equiv TMRST,  0177710 ; State register
 .equiv TMREVN, 0310    ; External event interrupt
 .equiv TMRINT, 0304    ; Programmable timer interrupt
 .equiv TMRBRG, 0177712 ; Buffer register
+.equiv TMRBUF, TMRBRG
 .equiv TMRCST, 0177714 ; Current state register
 
 .equiv CTRLRG, 0177716 ; system control register
@@ -192,5 +194,7 @@
 .equiv PSG0, 0177360
 .equiv PSG1, 0177362
 .equiv PSG2, 0177364
+.equiv OPL2, 0177374 ; 65276 0xFEFC
 ; register stub, responds with RPLY, returns 010000 (4096)
 .equiv PSG_STUB, 0177704
+; }}}

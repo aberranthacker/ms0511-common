@@ -196,5 +196,5 @@
 .equiv PSG2, 0177364
 .equiv OPL2, 0177374 ; 65276 0xFEFC
 ; register stub, responds with RPLY, returns 010000 (4096)
-.equiv PSG_STUB, 0177704
+.equiv STUB_REGISTER, 0177704
 ; }}}

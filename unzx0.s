@@ -11,10 +11,7 @@
 ;         R1 - next byte after the decompressed data
 ; corrupts: R2, R3, R4, R5
 
-       .include "macros.s"
-       .global UnZX0
-
-UnZX0:
+unZX0:
 
 DZX0:
     CLR R2

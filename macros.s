@@ -24,6 +24,7 @@
   .endif
     JSR PC,\dst
 .endm
+
 .macro .call cond=none, dst:req ; CALL cc,nn
     _call \cond, \dst
 .endm
@@ -41,11 +42,16 @@
     BCS .+6
   .elseif \cond == "CS" ; carry set
     BCC .+6
+  .elseif \cond == "MI" ; negative set
+    BPL .+6
+  .elseif \cond == "PL" ; negative clear
+    BMI .+6
   .else
     .error "Unknown condition for conditional jump"
   .endif
     JMP \dst
 .endm
+
 .macro .jmp cond=none, dst:req ; JP cc,nn
     _jmp \cond, \dst
 .endm
@@ -78,6 +84,15 @@
     XOR \reg1,\reg0
     XOR \reg0,\reg1
     XOR \reg1,\reg0
+.endm
+
+.macro _movb src:req, dst_reg:req
+    .ifdef PREVENT_SIGN_EXTENSION
+        clr \dst_reg
+        bisb \src, \dst_reg
+    .else
+        movb \src, \dst_reg
+    .endif
 .endm
 
 ; corrupts: R3, R4, and R5
@@ -123,4 +138,10 @@
 
 .macro _screen_char_lut base_addr:req, rows_count=24, start_row=0, char_height=8
     _screen_lines_lut \base_addr, \rows_count, \start_row, \char_height
+.endm
+
+.macro _unZX0 src:req, dst:req
+    mov #\src, r0
+    mov #\dst, r1
+    call unZX0
 .endm
